@@ -18,4 +18,5 @@ Prepare app is an iOS app built with swiftUI and cloudkit.
 - [ ] Event full view
 - [ ] Edit Event
 - [ ] Share an event using cloudkit share
+- [ ] Settings
 
