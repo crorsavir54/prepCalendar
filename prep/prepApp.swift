@@ -12,7 +12,7 @@ struct prepApp: App {
     @StateObject var event = EventViewModel()
     var body: some Scene {
         WindowGroup {
-            OnBoardView()
+            MainView()
 //            EventFullView(event: Event(title: "Conference", date: Date.init("2021-11-26"),color: Color.indigo, completionStatus: false, tasks: Task.data2))
                 .environmentObject(event)
         }
