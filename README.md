@@ -6,8 +6,9 @@
 Prepare app is an iOS app built with swiftUI and cloudkit.
 
 <p float="left">
-  <img src="https://github.com/crorsavir54/foodmenu/blob/main/screenshots/MenuScreen.png" width="32%" />
-  <img src="https://github.com/crorsavir54/foodmenu/blob/main/screenshots/MenuScreen.png" width="32%" /> 
-  <img src="https://github.com/crorsavir54/foodmenu/blob/main/screenshots/MenuScreen.png" width="32%" />
+  <img src="https://github.com/crorsavir54/prepCalendar/blob/main/screenshots/onBoardScreen.png" width="24%" />
+  <img src="https://github.com/crorsavir54/prepCalendar/blob/main/screenshots/MainScreen.png" width="24%" /> 
+  <img src="https://github.com/crorsavir54/prepCalendar/blob/main/screenshots/AddEventScreen.png" width="24%" />
+  <img src="https://github.com/crorsavir54/prepCalendar/blob/main/screenshots/JumpToDateScreen.png" width="24%" />
 </p>
 
