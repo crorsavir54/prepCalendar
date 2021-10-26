@@ -12,3 +12,10 @@ Prepare app is an iOS app built with swiftUI and cloudkit.
   <img src="https://github.com/crorsavir54/prepCalendar/blob/main/screenshots/JumpToDateScreen.png" width="24%" />
 </p>
 
+#### To-dos:
+[ ] Persistence
+  - Core Data and CloudKit Integration
+[ ] Event full view
+[ ] Edit Event
+[ ] Share an event using cloudkit share
+
