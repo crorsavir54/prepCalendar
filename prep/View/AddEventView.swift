@@ -9,13 +9,14 @@ import SwiftUI
 
 struct AddEventView: View {
     @Environment(\.dismiss) var dismiss
-    @State var event = Event(title: "", color: .blue)
+    @State var event = Event(title: "", color: .blue, tasks: [Task]())
+    @State var tasks = [Task]()
     @State var title = ""
     @State var date = Date()
     @State var withDate = false
     
     var didAddEvent: (_ event: Event) -> Void
-    
+
     var body: some View {
         NavigationView {
             Form {
@@ -38,7 +39,7 @@ struct AddEventView: View {
                     }
                 }
                 Section {
-                    NavigationLink(destination: SubtasksView(tasks: $event.tasks)) {
+                    NavigationLink(destination: SubtasksView(tasks: $tasks)) {
                         Label("Tasks", systemImage: "checklist")
                     }
                 }
@@ -48,10 +49,8 @@ struct AddEventView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
-                        event.title = title
-                        event.date = date
-                        print(event.date)
-                        let newEvent = event
+                        print("Added Date is \(date) and event is\(event.date)")
+                        let newEvent = Event(title: title, date: date, color: .pink, tasks: tasks)
                         didAddEvent(newEvent)
                         print("Done")
                     } label: {
@@ -72,13 +71,16 @@ struct AddEventView: View {
 
 struct SubtasksView: View {
     @Binding var tasks: [Task]
+    @State var taskName = ""
     var body: some View {
         List {
             ForEach(tasks) { task in
                 Text(task.title)
             }
+            TextField("Task", text: $taskName)
             Button {
-                print("Add task")
+                let task = Task(title: taskName)
+                tasks.append(task)
             } label: {
                 Text("Add Task")
             }

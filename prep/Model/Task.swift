@@ -7,16 +7,19 @@
 
 import Foundation
 
-struct Task: Identifiable, Codable {
+struct Task: Identifiable, Codable, Equatable {
+    
+    static func == (lhs: Task, rhs: Task) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
     let id: UUID
     var title: String
-    var event: Event
     var completionStatus: Bool
     
-    init(id: UUID = UUID(), title: String, event: Event, completionStatus: Bool = false) {
+    init(id: UUID = UUID(), title: String, completionStatus: Bool = false) {
         self.id = id
         self.title = title
-        self.event = event
         self.completionStatus = completionStatus
     }
 }
@@ -24,15 +27,15 @@ struct Task: Identifiable, Codable {
 extension Task {
     static var data: [Task] {
         [
-            Task(title: "Need this", event: Event(title: "This", color: .blue),completionStatus: true),
-            Task(title: "Need that", event: Event(title: "This", color: .blue),completionStatus: true)
+            Task(title: "Need this",completionStatus: true),
+            Task(title: "Need that",completionStatus: true)
         ]
     }
     
     static var data2: [Task] {
         [
-            Task(title: "Send out invitations", event: Event(title: "This", color: .blue)),
-            Task(title: "Reserve a table", event: Event(title: "This", color: .blue))
+            Task(title: "Send out invitations"),
+            Task(title: "Reserve a table")
         ]
     }
 }

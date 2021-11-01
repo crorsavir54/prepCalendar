@@ -8,19 +8,36 @@
 import SwiftUI
 
 struct EventFullView: View {
+    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var vm: EventViewModel
     @State var event: Event
-    let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        return formatter
-    }()
+    
+
     var body: some View {
         NavigationView {
             List {
-                ForEach(event.tasks.indices) { index in
-                    Text("\(event.tasks[index].title)")
+                ForEach(vm.returnEvent(event: event)!.tasks) { task in
+                    HStack {
+                        Button {
+                            vm.toggleTask(event: event, task: task)
+                        } label: {
+                            Image(systemName: task.completionStatus ? "circle.fill" : "circle")
+                        }
+                        .buttonStyle(.plain)
+                        Text("\(task.title)")
+                    }
                 }
-            }.navigationTitle(event.title)
+            }
+            .navigationTitle(event.title)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        
+                    } label: {
+                        Text("Edit")
+                    }
+                }
+            }
         }
     }
 }

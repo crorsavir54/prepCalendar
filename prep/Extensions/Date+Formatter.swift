@@ -34,14 +34,22 @@ extension Date {
 }
 
 extension Date {
-    var monthNum: Int {
-//        let dateFormatter = DateFormatter()
-//        let name = dateFormatter.string(from: self)
-        let index = Calendar.current.component(.month, from: self)
-        return index
-//        return dateFormatter.string(from: self)
+    var year: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy"
+        return dateFormatter.string(from: self)
     }
 }
+
+extension Date {
+    var monthYear: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM yyyy"
+        return dateFormatter.string(from: self)
+    }
+}
+
+
 
 extension Date {
     var day: String {
