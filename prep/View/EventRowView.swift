@@ -10,20 +10,24 @@ import SwiftUI
 struct EventRowView: View {
     @State var event: Event
     @State var day = 0
-    let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        return formatter
-    }()
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         VStack(spacing: 5) {
             HStack {
                 if Calendar.current.isDateInToday(event.date){
-                    Image(systemName: "hourglass.tophalf.filled")
-                    Text("Today")
-                        .font(.subheadline)
-                        .fontWeight(.bold)
+                    if event.tasks.filter{$0.completionStatus == false}.count > 0 {
+                        Image(systemName: "clock.badge.exclamationmark")
+                        Text("Today, better get ready")
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                    } else {
+                        Image(systemName: "hourglass.tophalf.filled")
+                        Text("Today")
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                    }
+
                 }
                 else if Calendar.current.isDateInTomorrow(event.date){
                     Image(systemName: "hourglass")
@@ -32,10 +36,17 @@ struct EventRowView: View {
                         .fontWeight(.bold)
                 }
                 else {
-                    Image(systemName: "hourglass.bottomhalf.filled")
-                    Text("Event in \(day) days")
-                        .font(.subheadline)
-                        .fontWeight(.bold)
+                    if day >= 0 {
+                        Image(systemName: "hourglass.bottomhalf.filled")
+                        Text("Event in \(day) days")
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                    } else {
+                        Image(systemName: "clock.arrow.circlepath")
+                        Text("Event is already in the past")
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                    }
                 }
                 Spacer()
             }
@@ -49,19 +60,21 @@ struct EventRowView: View {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
                         VStack(alignment: .leading) {
+                            Text(event.date, format: .dateTime.day().month(.wide).year())
+                                .font(.caption2)
+                                .fontWeight(.medium)
+                                
                             Text(event.title)
                                 .font(.system(size: 30, design: .rounded))
                                 .fontWeight(.bold)
                                 .foregroundColor(event.color)
                                 .lineLimit(1)
-                            Text(event.date, formatter: dateFormatter)
-                                .font(.caption2)
-                                .fontWeight(.medium)
                                 .padding(.bottom,1)
+
                             ForEach(event.tasks.prefix(3)) { task in
                                 HStack {
                                     if task.completionStatus {
-                                        Image(systemName: "circle.circle.fill")
+                                        Image(systemName: "circle.inset.filled")
                                             .font(.caption)
                                             .foregroundColor(event.color)
                                             
@@ -73,9 +86,11 @@ struct EventRowView: View {
                                     }
                                     Text(task.title)
                                         .strikethrough(task.completionStatus)
-                                        .foregroundColor(task.completionStatus ? .gray:.black)
+//                                        .foregroundColor(task.completionStatus ? .gray:.black)
+                                        
                                         .fontWeight(.light)
                                         .font(.caption)
+                                        .lineLimit(1)
                                 }
                             }
                             if event.tasks.count > 3 {
@@ -112,22 +127,26 @@ struct EventRowView: View {
 //                                    .foregroundColor(.red)
                                     .padding(10)
                             }.frame(width: 50, height: 50)
-                            Text("\(event.tasks.filter{$0.completionStatus == false}.count) tasks left")
+                            Text("\(event.tasks.filter{$0.completionStatus == false}.count) task left")
                                 .font(.system(size: 10, design: .rounded))
                                 .foregroundColor(.red)
                                 .fontWeight(.bold)
-                            
                         }
-                        
                     }
                     .frame(width: 70, height: 70)
                     .padding(10)
                 }
                 .padding()
                 .frame(maxHeight: 150)
-                .background(.white, in: RoundedRectangle(cornerRadius: 20))
+                .background(colorScheme == .dark ? .thinMaterial : .ultraThickMaterial, in: RoundedRectangle(cornerRadius: 20))
                 .clipped()
-                .shadow(color: Color.black.opacity(0.1), radius: 8, x: 2, y: 8)
+//                .overlay(RoundedRectangle(cornerRadius: 20)
+//                            .fill(event.tasks.filter({$0.completionStatus == false}).count == 0 ? .green.opacity(0.05) : .green.opacity(0)))
+//                .overlay(
+//                        RoundedRectangle(cornerRadius: 20)
+//                            .stroke(event.color.opacity(1), lineWidth: 2)
+//                    )
+                .shadow(color: Color.black.opacity(0.2), radius: 8, x: 2, y: 8)
             }
         }
     }

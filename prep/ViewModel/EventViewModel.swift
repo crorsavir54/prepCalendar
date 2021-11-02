@@ -47,7 +47,6 @@ class EventViewModel: ObservableObject {
     @Published var sections = [Month]()
     
     init(){
-        
         eventRepository.$events
             .assign(to: \.events, on: self)
             .store(in: &cancellables)
@@ -94,33 +93,14 @@ class EventViewModel: ObservableObject {
     func daysBetween(start: Date, end: Date) -> Int {
         return Calendar.current.dateComponents([.day], from: start, to: end).day!
     }
-    //Custom stickyheader hack calculation
-    //    func offSetPerMonth() -> ([Float],[Date]) {
-    //        var eventHolder = events.first!.date
-    //        var offsetArray = [Float]()
-    //        var offsetValue: Float = 0
-    //        var monthsArray = [Date]()
-    //        var counter: Float = 0
-    //        let sortedEvents = events.sorted(by: {$0.date < $1.date})
-    //        for event in sortedEvents {
-    //            if event.date.month != eventHolder.month{
-    //                monthsArray.append(eventHolder)
-    //                offsetArray.append(offsetValue + 50*counter)
-    //                offsetValue = 150.0
-    //                eventHolder = event.date
-    //                counter += 1.0
-    //            }else {
-    //                offsetValue += 150.0
-    //            }
-    //        }
-    //        monthsArray.append(eventHolder)
-    //        offsetArray.append(offsetValue)
-    //        print(offsetArray)
-    //        print(monthsArray)
-    //        return (offsetArray, monthsArray)
-    //    }
     
-    
-    
+    // Return passed event from the viewmodel for direct access //TO FIX, might produce unexpected behavior
+    func showEvent(event: Event) -> Event {
+        if let eventFound = events.first(where: {$0==event}) {
+            return eventFound
+        } else {
+            return Event(title: "Empty", color: .red)
+        }
+    }
     
 }

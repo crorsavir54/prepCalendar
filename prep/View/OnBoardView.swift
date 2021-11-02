@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct OnBoardView: View {
+    
     var body: some View {
         GeometryReader { proxy in
             VStack(alignment: .leading) {
@@ -45,7 +46,9 @@ struct OnBoardView: View {
                         Spacer()
                     }
                     Button {
-                        print("Get Started")
+                        withAnimation {
+
+                        }
                     } label: {
                         Text("Get Started")
                             .font(.system(size: 25, design: .rounded))
@@ -57,8 +60,7 @@ struct OnBoardView: View {
                     .buttonBorderShape(.roundedRectangle(radius: 10))
                     .controlSize(.large)
                     .toggleStyle(.button)
-                        
-
+                    .padding(.bottom, 10)
                 }
             }
             
@@ -67,8 +69,8 @@ struct OnBoardView: View {
     }
 }
 
-struct OnBoardView_Previews: PreviewProvider {
-    static var previews: some View {
-        OnBoardView()
-    }
-}
+//struct OnBoardView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        OnBoardView()
+//    }
+//}

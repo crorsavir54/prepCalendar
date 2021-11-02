@@ -56,21 +56,12 @@ struct JumpToDateView: View {
                                                     }
                                                 }
                                         ).animation(.interpolatingSpring(mass: 0.15,stiffness: 70, damping: 1), value: offset)
-                                        
-                                    
-                                
-
-                                    
                             }
                         }
                     }
-                    
                     .padding(.top)
                     .background(Color(UIColor.systemGray6))
                     .transition(.customTransition)
-//                    .transition(.move(edge: .bottom))
-                    
-                        // 2
                 }
             }
             .navigationTitle("Jump to date")
@@ -86,11 +77,9 @@ struct JumpToDateView: View {
                         } label: {
                             if showEvents {
                                 Text("Hide")
-                                
                             } else {
                                 Text("Show")
                             }
-                            
                         }
                         Button {
                             print("Go")

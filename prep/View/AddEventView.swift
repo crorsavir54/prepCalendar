@@ -25,8 +25,6 @@ struct AddEventView: View {
                         "Title",
                          text: $title
                     )
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
                 }
                 Section {
                     Toggle(isOn: $withDate) {
@@ -81,6 +79,7 @@ struct SubtasksView: View {
             Button {
                 let task = Task(title: taskName)
                 tasks.append(task)
+                taskName = ""
             } label: {
                 Text("Add Task")
             }

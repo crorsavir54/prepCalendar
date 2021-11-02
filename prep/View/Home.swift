@@ -15,7 +15,6 @@ struct Home: View {
                             Circle()
                                 .fill(Color.gray.opacity(0.6))
                                 .frame(width: 70, height: 70)
-
                             VStack(alignment: .leading, spacing: 15, content: {
                                 Rectangle()
                                     .fill(Color.gray.opacity(0.6))

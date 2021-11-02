@@ -27,6 +27,7 @@ final class EventRepository: ObservableObject {
                 guard let data = try? Data(contentsOf: Self.fileURL) else {
                     #if DEBUG
                     DispatchQueue.main.async {
+//                        UserDefaults.standard.set(true, forKey: "firstTimeUser")
                         self?.get()
                     }
                     #endif
@@ -36,6 +37,7 @@ final class EventRepository: ObservableObject {
                     fatalError("Can't decode saved scrum data.")
                 }
                 DispatchQueue.main.async {
+//                    UserDefaults.standard.set(false, forKey: "firstTimeUser")
                     self?.events = events
                 }
             }
