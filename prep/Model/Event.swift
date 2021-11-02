@@ -5,15 +5,16 @@
 //  Created by coriv🧑🏻‍💻 on 10/20/21.
 //
 
-import Foundation
+//import Foundation
 import SwiftUI
+import CoreData
 
 struct Event: Identifiable, Codable, Equatable {
     static func == (lhs: Event, rhs: Event) -> Bool {
         return lhs.id == rhs.id
     }
     
-    let id: UUID
+    var id: UUID
     var title: String
     var date: Date
     var color: Color

@@ -58,12 +58,13 @@ struct EventRowView: View {
                                 .font(.caption2)
                                 .fontWeight(.medium)
                                 .padding(.bottom,1)
-                            ForEach(event.tasks) { task in
+                            ForEach(event.tasks.prefix(3)) { task in
                                 HStack {
                                     if task.completionStatus {
                                         Image(systemName: "circle.circle.fill")
                                             .font(.caption)
                                             .foregroundColor(event.color)
+                                            
                                     }
                                     else {
                                         Image(systemName: "circle")
@@ -71,16 +72,22 @@ struct EventRowView: View {
                                             .foregroundColor(event.color)
                                     }
                                     Text(task.title)
+                                        .strikethrough(task.completionStatus)
+                                        .foregroundColor(task.completionStatus ? .gray:.black)
                                         .fontWeight(.light)
                                         .font(.caption)
                                 }
+                            }
+                            if event.tasks.count > 3 {
+                                Text("...")
+                                    .font(.caption2)
                             }
                         }
                         Spacer()
                     }
                     Spacer()
                     VStack(spacing: 10) {
-                        if event.completionStatus {
+                        if event.tasks.filter({$0.completionStatus == false}).count == 0 {
                             ZStack{
                                 Circle()
                                     .foregroundColor(.green)
@@ -94,7 +101,6 @@ struct EventRowView: View {
                                 .font(.system(size: 10, design: .rounded))
                                 .foregroundColor(.green)
                                 .fontWeight(.bold)
-                            
                         } else {
                             ZStack{
                                 Circle()
@@ -106,7 +112,7 @@ struct EventRowView: View {
 //                                    .foregroundColor(.red)
                                     .padding(10)
                             }.frame(width: 50, height: 50)
-                            Text("2 tasks left")
+                            Text("\(event.tasks.filter{$0.completionStatus == false}.count) tasks left")
                                 .font(.system(size: 10, design: .rounded))
                                 .foregroundColor(.red)
                                 .fontWeight(.bold)

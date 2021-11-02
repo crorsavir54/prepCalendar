@@ -10,28 +10,33 @@ import SwiftUI
 
 struct MainView: View {
     
+//    
+//    @Environment(\.managedObjectContext) private var viewContext
+//    @FetchRequest(sortDescriptors: [])
+//    private var events: FetchedResults<PrepEvent>
+    
     //View Presentors
     @State private var jumpToDateIsActive = false
     @State private var addEventisActive = false
     @State private var eventFullViewIsActive = false
     //Temp vars
-    @State var selectedEvent: Event? = nil
+    @State var selectedEvent = Event(title: "", color: .pink)
     @State var didTapEvent = false
     @State private var scrollTo = UUID()
     @State private var didAddEvent = false
-    //    @State var offset: CGPoint = .zero
+
     @State var date = Date()
     @EnvironmentObject var vm: EventViewModel
+
     @State private var offset = CGSize.zero
     @State private var defaultOffset = CGSize.zero
     @State var day = 0
     
-    private func detailsViewOnDismiss() {
-        print("DISMISSED VIEW")
-//        let dummyEvent = Event(title: "DUMMY", color: .blue)
-//        vm.addEvent(event: dummyEvent)
-//        vm.removeEvent(event: dummyEvent)
-//
+    // some kind of "hack" to refresh view //TO FIX
+    func changeId() {
+//        withAnimation {
+            vm.eventRepository.changeId(event: selectedEvent)
+//        }
     }
     var body: some View {
         
@@ -74,7 +79,7 @@ struct MainView: View {
                             ForEach(vm.sections) { section in
                                 Section {
                                     ForEach(vm.events.filter{$0.date.month == section.date.month && $0.date.year == section.date.year}.sorted {$0.date < $1.date}) { event in
-                                        ZStack(alignment: .trailing){
+//                                        ZStack(alignment: .trailing){
                                             //Swipe Gesture here
                                             //CARD ROW VIEW
                                             EventRowView(event: event)
@@ -82,6 +87,7 @@ struct MainView: View {
                                                 .padding(.bottom,10)
                                                 .offset(x: selectedEvent == event ? offset.width : defaultOffset.width, y: 0)
                                                 .animation(.easeInOut, value: offset)
+                                                .id(event.id)
                                                 .onTapGesture(perform: {
                                                     self.selectedEvent = event
                                                     eventFullViewIsActive.toggle()
@@ -99,10 +105,11 @@ struct MainView: View {
                                                             self.selectedEvent = event
                                                             self.offset = value.translation
                                                         }
-                                                        .onEnded { _ in self.selectedEvent = nil
+                                                        .onEnded { _ in self.selectedEvent = Event(title: "", color: .black)
                                                         }
                                                 )
-                                        }
+//                                        }
+                                        
                                         
                                     }
                                 } header: {
@@ -128,8 +135,6 @@ struct MainView: View {
                                     
                                     
                                 }
-//                                .id(UUID())
-                                //Scroll to jumpdate
                                 .onChange(of: date) { id in
                                     withAnimation{
                                         let scroll = vm.events.first(where: {$0.date.month == date.month})
@@ -139,14 +144,14 @@ struct MainView: View {
                                 }
                                 //                                Scroll to newly added
                                 .onAppear{
+//                                    events = vm.events
                                     if didAddEvent {
                                         withAnimation{
                                             let scroll = vm.events.first(where: {$0.date.month == date.month})
                                             proxy.scrollTo(scroll?.id, anchor: .top)
                                         }
-                                        
+                                        didAddEvent = false
                                     }
-                                    didAddEvent = false
                                 }
                             }
                         }
@@ -155,8 +160,9 @@ struct MainView: View {
                 
             }
             .background(Color(UIColor.systemGray6))
-            .sheet(isPresented: $eventFullViewIsActive, onDismiss: detailsViewOnDismiss) {
-                EventFullView(event: selectedEvent!)
+            
+            .sheet(isPresented: $eventFullViewIsActive, onDismiss: changeId) {
+                EventFullView(event: selectedEvent)
             }
             .sheet(isPresented: $addEventisActive) {
                 AddEventView(date: date) {
@@ -165,7 +171,6 @@ struct MainView: View {
                     print("Added date is \(addedEvent.date.month)")
                     vm.addEvent(event: addedEvent)
                     //change this view state date to scroll to newlyaddded event
-                    
                     addEventisActive.toggle()
                 }
             }
@@ -176,6 +181,8 @@ struct MainView: View {
                     jumpToDateIsActive.toggle()
                 }
             }
+            
+
             
         }
         

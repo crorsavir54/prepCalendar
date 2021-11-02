@@ -9,10 +9,6 @@ import Foundation
 
 struct Task: Identifiable, Codable, Equatable {
     
-    static func == (lhs: Task, rhs: Task) -> Bool {
-        return lhs.id == rhs.id
-    }
-    
     let id: UUID
     var title: String
     var completionStatus: Bool

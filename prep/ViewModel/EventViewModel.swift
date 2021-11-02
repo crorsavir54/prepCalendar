@@ -27,6 +27,8 @@ struct Month: Identifiable, Codable, Equatable {
     
 }
 class EventViewModel: ObservableObject {
+    @Published var eventRepository = EventRepository()
+    private var cancellables: Set<AnyCancellable> = []
     
     @Published var events = [Event]() {
         didSet {
@@ -42,28 +44,13 @@ class EventViewModel: ObservableObject {
       
     }
     
-    @Published var sections = [Month]() {
-        didSet {
-            objectWillChange.send()
-        }
-    }
-
-    private var cancellables: Set<AnyCancellable> = []
+    @Published var sections = [Month]()
     
     init(){
-        events.append(Event(title: "Japan Trip", color: Color.blue, completionStatus: true, tasks: Task.data))
-        events.append(Event(title: "My birthday", date: Date.init("2021-10-26"),color: Color.pink, completionStatus: false, tasks: Task.data2))
-        events.append(Event(title: "Not my birthday", date: Date.init("2021-11-26"),color: Color.indigo, completionStatus: false, tasks: Task.data2))
-        events.append(Event(title: "John's Wedding", date: Date.init("2021-11-27"),color: Color.orange, completionStatus: false, tasks: Task.data2))
-        events.append(Event(title: "Not my birthday", date: Date.init("2021-11-28"),color: Color.black, completionStatus: false, tasks: Task.data2))
-        events.append(Event(title: "Not my birthday", date: Date.init("2021-12-28"),color: Color.pink, completionStatus: false, tasks: Task.data2))
-        events.append(Event(title: "Not my birthday", date: Date.init("2021-12-28"),color: Color.pink, completionStatus: false, tasks: Task.data2))
-        events.append(Event(title: "Not my birthday", date: Date.init("2021-12-28"),color: Color.pink, completionStatus: false, tasks: Task.data2))
-        events.append(Event(title: "Not my birthday", date: Date.init("2022-01-01"),color: Color.indigo, completionStatus: false, tasks: Task.data2))
-        events.append(Event(title: "Not my birthday", date: Date.init("2022-01-01"),color: Color.indigo, completionStatus: false, tasks: Task.data2))
-        events.append(Event(title: "Not my birthday", date: Date.init("2022-01-01"),color: Color.indigo, completionStatus: false, tasks: Task.data2))
-        events.append(Event(title: "Not my birthday", date: Date.init("2022-01-01"),color: Color.indigo, completionStatus: false, tasks: Task.data2))
-        events.append(Event(title: "Not my birthday", date: Date.init("2022-01-01"),color: Color.indigo, completionStatus: false, tasks: Task.data2))
+        
+        eventRepository.$events
+            .assign(to: \.events, on: self)
+            .store(in: &cancellables)
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "LLLL"
@@ -81,27 +68,27 @@ class EventViewModel: ObservableObject {
         }
         return nil
     }
+    func toggleCompletion(event: Event) {
+        eventRepository.toggleEventCompletion(event: event)
+    }
     
     func addEvent(event: Event) {
-        if let index = events.firstIndex(of: event) {
-            events[index] = event
-        } else {
-            events.append(event)
-        }
+        
+        eventRepository.addEvent(event: event)
     }
     
     func removeEvent(event: Event) {
-        if let index = events.firstIndex(of: event) {
-            events.remove(at: index)
+        if events.firstIndex(of: event) != nil {
+            eventRepository.removeEvent(event: event)
         }
     }
     
     func toggleTask(event: Event, task: Task) {
-        if let index = events.firstIndex(of: event) {
-            if let taskIndex = events[index].tasks.firstIndex(of: task) {
-                events[index].tasks[taskIndex].completionStatus.toggle()
-            }
-        }
+        eventRepository.toggleTask(event: event, task: task)
+    }
+    
+    func deleteTask(event: Event, task: Task) {
+        eventRepository.deleteTask(event: event, task: task)
     }
     
     func daysBetween(start: Date, end: Date) -> Int {

@@ -10,6 +10,7 @@ import SwiftUI
 @main
 struct prepApp: App {
     @StateObject var event = EventViewModel()
+    
     var body: some Scene {
         WindowGroup {
             MainView()
