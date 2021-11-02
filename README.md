@@ -13,9 +13,9 @@ Prepare app is an iOS app built with swiftUI and cloudkit.
 </p>
 
 #### To-dos:
-- [ ] Persistence
+- [X] Persistence
   - [ ] Core Data and CloudKit Integration
-- [ ] Event full view
+- [X] Event full view
 - [ ] Edit Event
 - [ ] Share an event using cloudkit share
 - [ ] Settings
